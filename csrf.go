@@ -98,7 +98,7 @@ func Middleware(options Options) gin.HandlerFunc {
 		var salt string
 
 		if s, ok := session.Get(csrfSalt).(string); !ok || len(s) == 0 {
-			c.Next()
+			errorFunc(c)
 			return
 		} else {
 			salt = s
