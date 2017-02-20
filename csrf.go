@@ -99,7 +99,7 @@ func Middleware(options Options) gin.HandlerFunc {
 		var salt string
 
 		if s, ok := session.Get(csrfSalt).(string); !ok || len(s) == 0 {
-			if _, err := c.GetCookie(authToken); err != nil {
+			if _, err := c.GetCookie(authToken); err == nil {
 				errorFunc(c)				
 			} else {
 				c.Next()
