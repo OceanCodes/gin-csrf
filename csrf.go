@@ -15,6 +15,7 @@ const (
 	csrfSecret = "csrfSecret"
 	csrfSalt   = "csrfSalt"
 	csrfToken  = "csrfToken"
+	authToken  = "Auth"
 )
 
 var defaultIgnoreMethods = []string{"GET", "HEAD", "OPTIONS"}
@@ -98,7 +99,11 @@ func Middleware(options Options) gin.HandlerFunc {
 		var salt string
 
 		if s, ok := session.Get(csrfSalt).(string); !ok || len(s) == 0 {
-			errorFunc(c)
+			if _, err := c.GetCookie(authToken); err != nil {
+				errorFunc(c)				
+			} else {
+				c.Next()
+			}
 			return
 		} else {
 			salt = s
